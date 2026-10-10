@@ -89,6 +89,22 @@ NineSlice* box(CCNode* parent,float x,float y,float w,float h,ccColor3B color) {
 }
 void fit(CCLabelTTF* l,float width){if(l->getContentWidth()>width)l->setScale(width/l->getContentWidth());}
 
+CCNode* entryIcon() {
+    auto node=CCNode::create();node->setContentSize({30,30});
+    auto draw=CCDrawNode::create();node->addChild(draw);
+    draw->drawCircle({15,15},14,{.10f,.08f,.19f,1},1,{.60f,.52f,1,1},48);
+    ccColor4F ink{.92f,.90f,1,1};
+    // A smooth headphone arch with two separate ear cups.
+    for(int i=0;i<20;++i){
+        float a=float(i)*3.14159265f/20.f,b=float(i+1)*3.14159265f/20.f;
+        draw->drawSegment({15+7*std::cos(a),15+7*std::sin(a)},
+            {15+7*std::cos(b),15+7*std::sin(b)},1.1f,ink);
+    }
+    draw->drawSegment({8,15},{8,10},1.6f,ink);
+    draw->drawSegment({22,15},{22,10},1.6f,ink);
+    return node;
+}
+
 class Settings : public Popup {
     std::string m_key;
     Config m_config;
@@ -137,7 +153,7 @@ class Settings : public Popup {
     }
     void showGuide(CCObject*) {
         // Use the game alert for the short, universally readable setup guide.
-        FLAlertLayer::create("Discord setup",fmt::format("1. Open Discord desktop > Settings > Keybinds.\n2. Add a keybind: <cg>Toggle Deafen</c>.\n3. Record <cy>F{}</c> and LEAVE the settings page.\n4. Join voice with sound ON.\n5. Click TEST twice in QuietRun.\n\nDisable other AutoDeafen features. Do not manually toggle deafen during a run.\nThe hotkey cannot read Discord's actual state.",functionKey()),"OK")->show();
+        FLAlertLayer::create("Discord setup",fmt::format("1. Open Discord desktop > Settings > Keybinds.\n2. Add a keybind: <cg>Toggle Deafen</c>.\n3. Record <cy>F{}</c> and LEAVE the settings page.\n4. Join voice with sound ON.\n5. Click TEST twice in AutoDeafen.\n\nDisable other AutoDeafen features. Do not manually toggle deafen during a run.\nThe hotkey cannot read Discord's actual state.",functionKey()),"OK")->show();
     }
     void onClose(CCObject* sender) override {
         if(testOwned) {testRestorePending=true;if(sendRestore()){testOwned=false;testRestorePending=false;}}
@@ -161,7 +177,7 @@ class Settings : public Popup {
         if(level){m_key=keyFor(level);m_config=load(m_key);}
         // A restrained editorial layout with two cards and a single primary action.
         box(m_mainLayer,29,268,3,24,Purple);
-        text(m_mainLayer,"QuietRun",42,273,23,White,true);
+        text(m_mainLayer,"AutoDeafen",42,273,23,White,true);
         text(m_mainLayer,"AUTO DEAFEN",43,254,8,Purple,true);
         text(m_mainLayer,"FOCUS ON THE RUN",411,270,8,Muted)->setAnchorPoint({1,.5f});
         m_state=text(m_mainLayer,"",43,235,8,Mint,true);
@@ -228,9 +244,9 @@ class $modify(QuietPlay,PlayLayer) {
             std::string value;
             if(quiet::current.enabled) {
                 if(!quiet::lastError.empty())value=quiet::lastError;
-                else if(quiet::engine.owned)value="QuietRun  ·  команда заглушения отправлена";
-                else if(quiet::engine.skippedStart)value="QuietRun  ·  старт после порога";
-                else value=fmt::format("QuietRun  ·  ожидание {:g}%",quiet::current.percent);
+                else if(quiet::engine.owned)value="AutoDeafen  ·  команда заглушения отправлена";
+                else if(quiet::engine.skippedStart)value="AutoDeafen  ·  старт после порога";
+                else value=fmt::format("AutoDeafen  ·  ожидание {:g}%",quiet::current.percent);
             }
             m_fields->hud->setString(value.c_str());m_fields->hud->setColor(quiet::engine.owned?quiet::Purple:quiet::Muted);
         }
@@ -249,8 +265,7 @@ class $modify(QuietPause,PauseLayer) {
     void customSetup(){
         PauseLayer::customSetup();auto size=CCDirector::get()->getWinSize();
         auto menu=CCMenu::create();menu->setID("pause-menu"_spr);menu->setPosition({0,0});addChild(menu,150);
-        auto node=CCNode::create();node->setContentSize({108,27});quiet::box(node,54,13.5f,108,27,{36,31,59});quiet::text(node,"QuietRun",54,13.5f,12,quiet::Purple);
-        auto item=CCMenuItemSpriteExtra::create(node,this,menu_selector(QuietPause::openQuiet));item->setID("open-settings"_spr);item->setPosition({size.width-67,size.height-23});menu->addChild(item);
+        auto item=CCMenuItemSpriteExtra::create(quiet::entryIcon(),this,menu_selector(QuietPause::openQuiet));item->setID("open-settings"_spr);item->setPosition({size.width-57,size.height-21});menu->addChild(item);
     }
     void openQuiet(CCObject*){auto p=PlayLayer::get();if(auto s=quiet::Settings::create(p?p->m_level:nullptr))s->show();}
 };
@@ -259,8 +274,7 @@ class $modify(QuietMenu,MenuLayer) {
         if(!MenuLayer::init())return false;
         quiet::restore();auto size=CCDirector::get()->getWinSize();
         auto menu=CCMenu::create();menu->setID("main-menu"_spr);menu->setPosition({0,0});addChild(menu,150);
-        auto node=CCNode::create();node->setContentSize({100,25});quiet::box(node,50,12.5f,100,25,{36,31,59});quiet::text(node,"QuietRun",50,12.5f,11,quiet::Purple);
-        auto item=CCMenuItemSpriteExtra::create(node,this,menu_selector(QuietMenu::openQuiet));item->setID("open-settings"_spr);item->setPosition({size.width-63,size.height-20});menu->addChild(item);return true;
+        auto item=CCMenuItemSpriteExtra::create(quiet::entryIcon(),this,menu_selector(QuietMenu::openQuiet));item->setID("open-settings"_spr);item->setPosition({size.width-23,size.height-21});menu->addChild(item);return true;
     }
     void openQuiet(CCObject*){if(auto s=quiet::Settings::create())s->show();}
 };

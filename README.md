@@ -1,4 +1,4 @@
-# QuietRun — AutoDeafen
+# AutoDeafen
 
 A Windows Geode mod that sends a configured Discord **Toggle Deafen** hotkey when a classic level reaches a selected percentage, then sends the same key again when the attempt ends.
 
@@ -23,7 +23,7 @@ The implementation was authored with OpenAI Codex. This is disclosed for review,
 2. In desktop Discord, open Settings → Keybinds → Add a Keybind.
 3. Select **Toggle Deafen** and record **F8**. Leave the Discord settings page.
 4. Turn off other AutoDeafen mods and mod-menu features.
-5. Start a classic level, pause, and open **QuietRun** in the upper right.
+5. Start a classic level, pause, and click the **headphone icon** in the upper right.
 6. Set the threshold and enable the level. Test twice before playing in voice.
 
 Hotkeys cannot read Discord's actual deafen state. Start with voice enabled and avoid manually changing the deafen state during an attempt. If either program runs elevated while the other does not, Windows may block input. Unexpected process termination cannot guarantee restoration.
@@ -50,4 +50,4 @@ Tests cover decimal thresholds, one toggle per run, death/end, pause/resume, dis
 
 Geode: https://github.com/geode-sdk/geode
 
-AutoDeafen is an existing feature and category, including Lynxdeer's mod: https://github.com/Lynxdeer/AutoDeafen . QuietRun is an independent implementation; it does not contain that repository's source code and is not endorsed by its author.
+AutoDeafen is an existing feature and category, including Lynxdeer's mod: https://github.com/Lynxdeer/AutoDeafen . AutoDeafen is an independent implementation; it does not contain that repository's source code and is not endorsed by its author.

@@ -1,10 +1,10 @@
-# QuietRun — AutoDeafen
+# AutoDeafen
 
 Focus on your run. Return to your friends.
 
 Windows hotkey-based AutoDeafen with per-level thresholds, decimal percentages, optional practice support, and voice restoration when an attempt ends.
 
-**Requires one Discord keybind:** set **Toggle Deafen** to **F8** in desktop Discord, then leave Discord's settings page. Open QuietRun from the level pause menu to enable a level.
+**Requires one Discord keybind:** set **Toggle Deafen** to **F8** in desktop Discord, then leave Discord's settings page. Open AutoDeafen from the level pause menu to enable a level.
 
 Disable other AutoDeafen features. Start with Discord voice enabled. Hotkey mode cannot read Discord's actual deafen state.
 
