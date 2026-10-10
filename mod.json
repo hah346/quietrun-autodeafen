@@ -1,0 +1,17 @@
+{
+  "geode": "5.11.1",
+  "gd": {"win": "2.2081"},
+  "id": "quietrun.autodeafen",
+  "name": "QuietRun - AutoDeafen",
+  "version": "v1.0.1",
+  "developer": "hah346",
+  "repository": "https://github.com/hah346/quietrun-autodeafen",
+  "tags": ["utility", "enhancement"],
+  "description": "AutoDeafen for Windows. Focus on your run, return to your friends.",
+  "settings": {
+    "deafen-key": {"type": "int", "name": "Discord key: 6 = F6, 8 = F8, 12 = F12", "default": 8, "min": 6, "max": 12},
+    "restore-on-pause": {"type": "bool", "name": "Restore voice while paused", "default": true},
+    "in-practice": {"type": "bool", "name": "Also work in Practice Mode", "default": false},
+    "show-hud": {"type": "bool", "name": "Show small status during gameplay", "default": true}
+  }
+}
